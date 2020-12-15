@@ -1,10 +1,19 @@
-import React from 'react';
-import { View, StyleSheet, StatusBar, Dimensions, Image, Text } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  StatusBar,
+  Dimensions,
+  Image,
+  Text,
+  ScrollView,
+} from 'react-native';
+import { format } from 'date-fns';
 
 import colors from '../constants/colors';
 import { ConversionInput } from '../components/ConversionInput';
-
-import { format } from 'date-fns';
+import { Button } from '../components/Button';
+import { KeyboardSpacer } from '../components/KeyboardSpacer';
 
 const screen = Dimensions.get('window');
 
@@ -12,7 +21,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.blue,
-    justifyContent: 'center',
+  },
+  content: {
+    paddingTop: screen.height * 0.2,
   },
   logoContainer: {
     alignItems: 'center',
@@ -32,54 +43,70 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     fontSize: 30,
-    marginVertical: 20,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 20,
   },
   text: {
+    fontSize: 14,
     color: colors.white,
-    fontSize: 13,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
+  inputContainer: {
+    marginBottom: 10,
+  },
 });
 
 export default () => {
   const baseCurrency = 'USD';
   const quoteCurrency = 'GBP';
-  const conversionRate = 0.8345;
-  const date = new Date();
+  const conversionRate = 0.89824;
+  const date = '2020-03-23';
+
+  const [scrollEnabled, setScrollEnabled] = useState(false);
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.blue} />
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../assets/images/background.png')}
-          style={styles.logoBackground}
-          resizeMode="contain"
-        />
-        <Image
-          source={require('../assets/images/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
-      <Text style={styles.textHeader}>Currency converter</Text>
-      <ConversionInput
-        text={baseCurrency}
-        value="123"
-        onButtonPress={() => alert('todo!')}
-        keyboardType="numeric"
-        onChangeText={(text) => console.log('text', text)}
-      />
-      <ConversionInput
-        text={quoteCurrency}
-        value="123"
-        editable={false}
-        onButtonPress={() => alert('todo!')}
-      />
-      <Text style={styles.text}>
-        {`1 ${baseCurrency} = ${conversionRate} ${quoteCurrency} as of ${format(date, 'MMMM do, yyyy')}`}
-        </Text>
+      <ScrollView scrollEnabled={scrollEnabled}>
+        <View style={styles.content}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/images/background.png')}
+              style={styles.logoBackground}
+              resizeMode="contain"
+            />
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.textHeader}>Currency Converter</Text>
+          <View style={styles.inputContainer}>
+            <ConversionInput
+              text={baseCurrency}
+              value="123"
+              onButtonPress={() => alert('todo!')}
+              keyboardType="numeric"
+              onChangeText={(text) => console.log('text', text)}
+            />
+            <ConversionInput
+              text={quoteCurrency}
+              value="123"
+              editable={false}
+              onButtonPress={() => alert('todo!')}
+            />
+          </View>
+          <Text style={styles.text}>
+            {`1 ${baseCurrency} = ${conversionRate} ${quoteCurrency} as of ${format(
+              new Date(date),
+              'MMM do, yyyy'
+            )}`}
+          </Text>
+          <Button text="Reverse Currencies" onPress={() => alert('todo!')} />
+          <KeyboardSpacer onToggle={(visible) => setScrollEnabled(visible)} />
+        </View>
+      </ScrollView>
     </View>
   );
 };

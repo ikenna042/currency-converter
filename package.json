@@ -15,7 +15,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "kill": "lsof -i tcp:19002"
   },
   "private": true
 }
